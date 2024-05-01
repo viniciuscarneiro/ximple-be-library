@@ -1,0 +1,63 @@
+networks:
+  ximple-network:
+    external: false
+services:
+  db:
+    networks:
+      - ximple-network
+    platform: linux/amd64
+    image: mysql:8.0
+    restart: always
+    container_name: library-backend-db
+    env_file: ./.env
+    environment:
+      MYSQL_DATABASE: $MYSQLDB_DATABASE
+      MYSQL_USER: $MYSQLDB_USER
+      MYSQL_PASSWORD: $MYSQLDB_PASSWORD
+      MYSQL_ROOT_PASSWORD: MYSQLDB_ROOT_PASSWORD
+    ports:
+      - ${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}
+    expose:
+      - $MYSQLDB_LOCAL_PORT
+    volumes:
+      - library-backend-db:/var/lib/mysql
+  redis:
+    image: redis/redis-stack:latest
+    container_name: library-backend-redis
+    networks:
+      - ximple-network
+    ports:
+      - ${REDIS_LOCAL_PORT}:${REDIS_DOCKER_PORT}
+  library-backend-api:
+    networks:
+      - ximple-network
+    depends_on:
+      - db
+      - redis
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    image: library-backend-v1
+    container_name: library-backend-api
+    restart: unless-stopped
+    ports:
+      - ${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}
+    env_file: ./.env
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: $MYSQLDB_LOCAL_PORT
+      DB_NAME: $MYSQLDB_DATABASE
+      MYSQL_USER: $MYSQLDB_USER
+      MYSQL_PASSWORD: $MYSQLDB_PASSWORD
+      SERVER_PORT: $SPRING_LOCAL_PORT
+      REDIS_HOST: redis
+      REDIS_PORT: $REDIS_LOCAL_PORT
+      SPRING_APPLICATION_JSON: '{
+              "spring.data.redis.host"  : "redis",
+              "spring.data.redis.port" : "6379"
+            }'
+    volumes:
+      - .m2:/root/.m2
+
+volumes:
+  library-backend-db:
