@@ -71,7 +71,7 @@ please refer to the source code or the API documentation.
 
 You can explore the API documentation using Swagger UI. 
 Access the Swagger UI
-by navigating to [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) in your browser.
+by navigating to http://localhost:<your-local-spring-port>/swagger-ui/index.html in your browser.
 
 ## Actuator Endpoints
 
