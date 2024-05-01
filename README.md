@@ -4,7 +4,7 @@ This project is a Java-based backend application for an online library system. I
 The application is built using Spring Boot and incorporates various technologies to ensure scalability, performance, and maintainability.
 ## Database ER Model
 
-![Database ER Model](library-backend-db.png)
+![Database Modeling](library-backend-db.png)
 
 ## Technologies Used
 
