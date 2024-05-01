@@ -2,6 +2,9 @@
 
 This project is a Java-based backend application for an online library system. It provides endpoints for managing books, reservations, user reviews, and user registration. 
 The application is built using Spring Boot and incorporates various technologies to ensure scalability, performance, and maintainability.
+## Database ER Model
+
+![Database ER Model](library-backend-db.png)
 
 ## Technologies Used
 
